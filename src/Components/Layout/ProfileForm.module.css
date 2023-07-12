@@ -1,0 +1,27 @@
+.top{
+    display: flex;
+    /* border: 1px solid red; */
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.welcomeExp{
+    margin-left: 20px;
+    font-size: 20px;
+    font-weight: 500;
+ }
+.completeProfile{
+    width:400px;
+   margin-right: 20px;
+   background-color: rgb(177, 143, 111);
+   font-size: 18px;
+   border-radius: 4px;
+   
+}
+.completeProfile Link{
+    text-decoration: none;
+}
+.Verification{
+    display: flex;
+    margin-top: 50px;
+    justify-content: center;
+}
