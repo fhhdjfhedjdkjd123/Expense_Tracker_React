@@ -17,7 +17,7 @@ const ProfileComplete = () => {
 
     const getData=async()=>{
         try{
-            const response=await fetch(`${Url}`, {
+            const response=await fetch(Url, {
                 method:'POST',
                 body:JSON.stringify({
                     idToken:token
@@ -28,7 +28,7 @@ const ProfileComplete = () => {
             })
             const data=await response.json();
             console.log(data, 'data');
-            setName(data.displayName);//to set data from resonse(backend) in input field
+            setName(data.displayName);
             setUrl(data.photoUrl);
         }catch(err){
             console.log(err);
@@ -44,7 +44,6 @@ const ProfileComplete = () => {
                     idToken:token,
                     displayName:name,
                     photoUrl:url,
-                    // deleteAttribute: "NULL",
                     returnSecureToken:false
                 }),
                 headers:{
