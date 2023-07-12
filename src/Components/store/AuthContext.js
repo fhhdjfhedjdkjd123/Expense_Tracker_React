@@ -5,6 +5,9 @@ const AuthContext=React.createContext();
 
 export const AuthProvider=(props)=>{
     const [login, setLogin] =useState(true);
+    //const initialEmail=!!localStorage.getItem('email')
+    const [Authenticate, setIsAuthenticate]=useState(false);
+
 
     let url;
     const Auth=async(userEmail, userPassword)=>{
@@ -30,9 +33,12 @@ export const AuthProvider=(props)=>{
             console.log(data);
             console.log(response.ok);
             if(!response.ok){
-                localStorage.setItem('token', data.idToken)
-                localStorage.setItem('email', userEmail)
+                localStorage.setItem('token', data.idToken);
+                //setIsAuthenticate(true);
+                localStorage.setItem('email', userEmail);
+                throw new Error(data.error.message);
             }else{
+                setIsAuthenticate(true);
                 if(login){
                     console.log("User has successfully login");
                 }else{
@@ -43,6 +49,7 @@ export const AuthProvider=(props)=>{
         }
         catch(err){
             console.log(err);
+            alert(err);
         }
     }
     const switchAuthHandler=()=>{
@@ -52,6 +59,7 @@ export const AuthProvider=(props)=>{
         switchAuth:switchAuthHandler,
         isLogin:login,
         authFunction:Auth,
+        isAuthenticate:Authenticate,
 
     }
     return (
