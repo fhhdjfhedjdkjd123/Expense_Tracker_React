@@ -33,11 +33,13 @@ export const AuthProvider=(props)=>{
             console.log(data);
             console.log(response.ok);
             if(!response.ok){
-                localStorage.setItem('token', data.idToken);
+                //localStorage.setItem('token', data.idToken);
                 //setIsAuthenticate(true);
-                localStorage.setItem('email', userEmail);
+                //localStorage.setItem('email', userEmail);
                 throw new Error(data.error.message);
             }else{
+                localStorage.setItem('token', data.idToken);
+                localStorage.setItem('email', userEmail);
                 setIsAuthenticate(true);
                 if(login){
                     console.log("User has successfully login");

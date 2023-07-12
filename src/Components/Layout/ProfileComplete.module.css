@@ -1,0 +1,82 @@
+.parent{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.leftMsg{
+    width:400px;
+    margin-top: 25px;
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 18px;
+}
+.rightMsg{
+    /* border: 1px solid green; */
+    width:370px;
+    background-color: rgb(177, 143, 111);
+    border-radius: 10px;
+    padding: 10px;
+    margin-right: 10px;
+
+}
+.line{
+    width: 100%;
+    height: 1px;
+    margin-top: 10px;
+    background-color: #777;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+    width:80vw;
+    margin-left: 15vw;
+    justify-content: center;
+    font-weight: bold;
+}
+.card1{
+    display: flex;
+    justify-content: space-between;
+    /* border: 1px solid red; */
+    margin-bottom: 10px;
+}
+.contact button{
+    border:0.5px solid brown;
+    color: brown;
+    cursor: pointer;
+}
+.card2{
+    display: flex;
+    /* border: 1px solid red; */
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    width: 90%;
+    margin-left: 5%;
+    align-items: center;
+}
+.catImg img{
+    width: 35px;
+    height: 20px;
+    margin-top: 5px;
+    
+    
+    /* border: 1px solid red; */
+}
+.earthImg img{
+    width: 25px;
+    height: 20px;
+    margin-top: 5px;
+    margin-right: 5px;
+    
+    /* border: 1px solid red; */
+}
+.card3 button{
+    background-color: brown;
+    color: white;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+}
