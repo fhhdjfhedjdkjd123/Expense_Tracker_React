@@ -1,0 +1,21 @@
+.container{
+    display: grid;
+    place-items: center;
+    margin-top: 20vh;
+  }
+  .authentication{
+    margin: 1rem auto;
+      width: 95%;
+      max-width: 25rem;
+      border-radius: 6px;
+      background-color: #003953;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+      padding: 1rem;
+      text-align: center;
+      margin-top: 2vh;
+      margin-bottom: 20vh;
+      color:white;
+  }
+  .error{
+    color:red;
+  }
