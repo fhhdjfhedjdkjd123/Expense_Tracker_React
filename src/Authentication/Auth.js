@@ -58,9 +58,7 @@ const Auth = (props) => {
         <Button variant="secondary" type="submit">{isLogin?'Login':'Create Account'}</Button><br/>
         </Form.Group>
         <Button variant="primary" type="submit" onClick={switchHandler}>{login?'Create new Account':'Login with existing account'}</Button>
-
       </Form>
-      
     </Container>
   );
 };
