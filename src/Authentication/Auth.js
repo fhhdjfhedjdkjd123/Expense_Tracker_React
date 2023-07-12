@@ -1,5 +1,6 @@
 import { useContext,useRef,useState} from "react";
 import { Button, Container, Form } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import classes from "./Auth.module.css"
 import AuthContext from "../Components/store/AuthContext";
 
@@ -26,14 +27,20 @@ const Auth = (props) => {
 
     const enteredEmail = emailRef.current.value;
     const enteredPassword = passwordRef.current.value;
-    const enteredConfirmPass=confirmPassRef.current.value;
-    if(enteredPassword !== enteredConfirmPass){
-      setError("Password doen't match");
+    if(!login){
+      const enteredConfirmPass=confirmPassRef.current.value;
+      if(enteredPassword !== enteredConfirmPass){
+        setError("Password doen't match");
+      }else{
+        setError(" ");
+        ctx.authFunction(enteredEmail,enteredPassword);
+        console.log(enteredEmail,enteredPassword,enteredConfirmPass);
+    
+      }
     }else{
-      setError(" ");
       ctx.authFunction(enteredEmail,enteredPassword);
-      console.log(enteredEmail,enteredPassword,enteredConfirmPass);
-  
+      console.log(enteredEmail,enteredPassword);
+
     }
   };
 
@@ -49,15 +56,18 @@ const Auth = (props) => {
           <Form.Label>Password</Form.Label>
           <Form.Control type="password" ref={passwordRef} placeholder="Enter Your Password" required />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicEmail" >
+        {!login && <Form.Group className="mb-3" controlId="formBasicEmail" >
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control type="password" ref={confirmPassRef} placeholder="Confirm Password" required/>
-        </Form.Group>
+        </Form.Group>}
         {error && <div className={classes.error}>{error}</div>}
         <Form.Group className="mb-3" controlId="formBasicEmail">
-        <Button variant="secondary" type="submit">{isLogin?'Login':'Create Account'}</Button><br/>
+        <Button variant="secondary" type="submit">{login?'Login':'Create Account'}</Button><br/>
         </Form.Group>
         <Button variant="primary" type="submit" onClick={switchHandler}>{login?'Create new Account':'Login with existing account'}</Button>
+        <div className={classes.link}>
+          <Link to="">Forgot Password</Link>
+        </div>
       </Form>
     </Container>
   );
