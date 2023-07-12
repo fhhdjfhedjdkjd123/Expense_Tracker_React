@@ -20,8 +20,9 @@
 .completeProfile Link{
     text-decoration: none;
 }
-.Verification{
+.verification{
     display: flex;
     margin-top: 50px;
+    margin-right: 50px;
     justify-content: center;
 }
