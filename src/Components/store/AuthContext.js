@@ -45,11 +45,9 @@ export const AuthProvider=(props)=>{
             console.log(err);
         }
     }
-
     const switchAuthHandler=()=>{
         setLogin((prev)=>!prev)
     }
-
     const cartContextValues={
         switchAuth:switchAuthHandler,
         isLogin:login,
