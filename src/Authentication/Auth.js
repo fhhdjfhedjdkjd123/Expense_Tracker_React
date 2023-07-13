@@ -66,7 +66,7 @@ const Auth = (props) => {
         </Form.Group>
         <Button variant="primary" type="submit" onClick={switchHandler}>{login?'Create new Account':'Login with existing account'}</Button>
         <div className={classes.link}>
-          <Link to="">Forgot Password</Link>
+          <Link to="/ForgotPassword">Forgot Password</Link>
         </div>
       </Form>
     </Container>

@@ -5,6 +5,7 @@ import Auth from './Authentication/Auth';
 import AuthContext from './Components/store/AuthContext';
 import ProfileForm from './Components/Layout/ProfileForm';
 import ProfileComplete from './Components/Layout/ProfileComplete';
+import ForgotPassword from './Components/Layout/ForgotPassword';
 
 const App=()=> {
   const ctx=useContext(AuthContext);
@@ -16,6 +17,9 @@ const App=()=> {
         </Route>
         <Route path="/profileCompleteForm" exact>
           {!ctx.isAuthenticate?<Auth/>:<ProfileComplete/>}
+        </Route>
+        <Route path="/ForgotPassword">
+           <ForgotPassword/>
         </Route>
       </Switch>
     </div>
