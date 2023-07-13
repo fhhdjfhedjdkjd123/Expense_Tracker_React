@@ -1,23 +1,36 @@
-import React from 'react';
-import Card from './Card';
+import React, { useContext } from 'react';
 import classes from './UserExpenseItem.module.css';
+import ExpenseContext from '../store/ExpenseContext';
 const UserExpenseItem=(props)=>{
+    const ctx=useContext(ExpenseContext);
     return(
-        <Card>
-        <ul>
-        {props.expenses.map((expense)=>(
-        <li className={classes.expense}>
-            <div className={classes.item}>
-                <h3>{expense.amount}</h3>
-                <div className={classes.description}>{expense.description}</div>
-                <div className={classes.category}>{expense.category}</div>
-           </div>
-        </li>
-        ))}
-        </ul>
-    </Card>
+    <div>
+      <table>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Amount</th>
+          
+          <th scope="col">Description</th>
+          <th scope="col">Category</th>
+          <th scope="col">Edit</th>
+          <th scope="col">Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {ctx.expenses.map((expense)=>{
+            return(
+            <tr key={expense.id}>
+                <td>{expense.amount}</td>
+                <td>{expense.description}</td>
+                <td>{expense.category}</td>
+            </tr>
+            )
+        })}
+      </tbody>
 
+      </table>
+    </div>
     )
-
 }
 export default UserExpenseItem;
