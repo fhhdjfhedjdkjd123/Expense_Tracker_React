@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { AuthProvider } from './Components/store/AuthContext';
 import {BrowserRouter} from 'react-router-dom';
+import { ExpenseContextProvider } from './Components/store/ExpenseContext';
 
 //React Bootstrap Configurarion
 import "../node_modules/react-bootstrap/dist/react-bootstrap";
@@ -14,7 +15,9 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <BrowserRouter>
         <AuthProvider>
+          <ExpenseContextProvider>
             <App />
+          </ExpenseContextProvider>
         </AuthProvider>
 
     </BrowserRouter>

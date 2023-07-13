@@ -1,12 +1,15 @@
-import React,{useState} from 'react';
+import React,{useState,useContext,useEffect} from 'react';
 import classes from './ExpenseForm.module.css';
+import ExpenseContext from '../store/ExpenseContext';
 
 
 const ExpenseForm=(props)=>{
+    const [expense, setExpense]=useState([]);
     const [amount,setAmount]=useState('');
     const [description,setDescription]=useState('');
-    const [category,setCategory]=useState('');
+    const [category,setCategory]=useState('food');
     const [show,setShow]=useState(false);
+    const ctx=useContext(ExpenseContext);
 
     const amountHandler=(e)=>{
         setAmount(e.target.value);
@@ -20,13 +23,61 @@ const ExpenseForm=(props)=>{
     const showHandler=()=>{
         setShow(true);
     }
+    let url='https://expense-tracker-3a05b-default-rtdb.firebaseio.com/';
+    const email=localStorage.getItem('email').replace(/[@,.]/g,'');
+    const getData=async()=>{
+      try{
+          const response=await fetch(`${url}/${email}.json`);
+          const data=await response.json()
+          let arrayOfData=[];
+          for(let key in data){
+              arrayOfData.push({id:key, ...data[key]})
+          }
+          setExpense(arrayOfData);
+          console.log(arrayOfData);
+      }
+      catch(err){
+          console.log(err);
+      }
+  }
+  
+    const postData=async(obj)=>{
+      try{
+          const response=await fetch(`${url}/${email}.json`,{
+              method:'POST',
+              body:JSON.stringify(obj),
+              headers:{
+                  'Content-Type':'application/json'
+              }
+          })
+    
+         const data=await response.json()
+         console.log(data)
+         getData()
+      }
+      catch(err){
+          console.log(err);
+      }
+    }
+    
     const submitHandler=(e)=>{
         e.preventDefault();
-        props.onAdd(amount,description,category);
-        setAmount('');
-        setDescription('');
-        setCategory('');
+        const obj={
+          amount:amount,
+          description:description,
+          category:category
+        }
+        postData(obj);
+        // props.onAdd(amount,description,category);
+        // setAmount('');
+        // setDescription('');
+        // setCategory('');
     }
+
+    useEffect(()=>{
+      getData()
+    },[]);
+    
     return(
     <div className={classes.parent}>
         <div className={classes.add}>
@@ -44,7 +95,7 @@ const ExpenseForm=(props)=>{
           <label  className="form-label">Category</label>
           <select className="form-select" value={category} onChange={categoryHandler}>
       
-          <option value="food">Food</option>
+          <option selected value="food">Food</option>
           <option value="petrol">Petrol</option>
           <option value="Shopping">Shopping</option>
           </select>
