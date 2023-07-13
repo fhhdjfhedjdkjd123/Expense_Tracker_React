@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import AuthContext from '../store/AuthContext';
 
 const Verification = () => {
+    const ctx=useContext(AuthContext);
     const token=localStorage.getItem('token');
     let url='https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDh4Q71z_iYl7koXLXL8FAvALOnpFvgCxU';
     const verifyEmail=async()=>{
@@ -20,9 +22,14 @@ const Verification = () => {
             console.log(err);
         }
     }
+
+    const logoutHandler=()=>{
+        ctx.logout();
+    }
   return (
     <div>
         <button onClick={verifyEmail} className="btn btn-warning"> Verify Email </button>
+        <button onClick={logoutHandler} className="btn btn-danger">Logout</button>
     </div>
   )
 }

@@ -5,6 +5,7 @@ import Auth from './Authentication/Auth';
 import AuthContext from './Components/store/AuthContext';
 import ProfileForm from './Components/Layout/ProfileForm';
 import ProfileComplete from './Components/Layout/ProfileComplete';
+
 const App=()=> {
   const ctx=useContext(AuthContext);
   return (
@@ -16,7 +17,6 @@ const App=()=> {
         <Route path="/profileCompleteForm" exact>
           {!ctx.isAuthenticate?<Auth/>:<ProfileComplete/>}
         </Route>
-
       </Switch>
     </div>
   );

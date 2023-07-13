@@ -54,14 +54,21 @@ export const AuthProvider=(props)=>{
             alert(err);
         }
     }
+
     const switchAuthHandler=()=>{
         setLogin((prev)=>!prev)
+    }
+
+    const logoutHandler=()=>{
+        setIsAuthenticate(false);
+        localStorage.clear();
     }
     const cartContextValues={
         switchAuth:switchAuthHandler,
         isLogin:login,
         authFunction:Auth,
         isAuthenticate:Authenticate,
+        logout:logoutHandler,
 
     }
     return (
