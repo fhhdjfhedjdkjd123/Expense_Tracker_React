@@ -3,12 +3,13 @@ import classes from './ExpenseForm.module.css';
 import ExpenseContext from '../store/ExpenseContext';
 
 
-const ExpenseForm=(props)=>{
+const ExpenseForm=()=>{
     const [expense, setExpense]=useState([]);
     const [amount,setAmount]=useState('');
     const [description,setDescription]=useState('');
     const [category,setCategory]=useState('food');
     const [show,setShow]=useState(false);
+
     const ctx=useContext(ExpenseContext);
 
     const amountHandler=(e)=>{
@@ -21,7 +22,7 @@ const ExpenseForm=(props)=>{
         setCategory(e.target.value);
     }
     const showHandler=()=>{
-        setShow(true);
+        setShow(!show);
     }
     let url='https://expense-tracker-3a05b-default-rtdb.firebaseio.com/';
     const email=localStorage.getItem('email').replace(/[@,.]/g,'');
@@ -40,6 +41,23 @@ const ExpenseForm=(props)=>{
           console.log(err);
       }
   }
+  const putData=async(obj)=>{
+    try {
+        const response=await fetch(`${url}/${email}/${ctx.id}.json`,{
+            method:'PUT',
+            body:JSON.stringify(obj),
+            headers:{
+                'Content-Type':'application/json'
+            }
+        })
+        console.log(response);
+        console.log("Expenses edited Successfully");
+        getData();
+        
+    } catch (error) {
+        console.log(error);
+    }
+  }
   
     const postData=async(obj)=>{
       try{
@@ -52,8 +70,9 @@ const ExpenseForm=(props)=>{
           })
     
          const data=await response.json()
-         console.log(data)
-         getData()
+         console.log(data);
+         console.log("Expenses added successfully");
+         getData();
       }
       catch(err){
           console.log(err);
@@ -67,13 +86,29 @@ const ExpenseForm=(props)=>{
           description:description,
           category:category
         }
-        postData(obj);
+        if(ctx.isEditing){
+          ctx.update(ctx.id,obj)
+          putData(obj)
+        }else{
+          postData(obj)
+        }
         // props.onAdd(amount,description,category);
         // setAmount('');
         // setDescription('');
         // setCategory('');
     }
-
+    useEffect(()=>{
+      if(ctx.isEditing){
+        setAmount(ctx.amount);
+        setDescription(ctx.description);
+        setCategory(ctx.category);
+      }else{
+        setAmount("")
+        setDescription("")
+        setCategory("")
+      }
+      },[ctx.isEditing])
+      
     useEffect(()=>{
       getData()
     },[]);
@@ -83,7 +118,7 @@ const ExpenseForm=(props)=>{
         <div className={classes.add}>
             <button type="button" className="btn btn-primary mt-5 mb-5" onClick={showHandler}>{show ? 'close' : '+Add Expense'}</button>
         </div>
-        <form className={classes.form} onSubmit={submitHandler}>
+       {show && <form className={classes.form} onSubmit={submitHandler}>
           <div class="mb-3">
             <label className="form-label">Amount</label>
             <input type="number" className="form-control" value={amount} onChange={amountHandler}/>  
@@ -99,8 +134,8 @@ const ExpenseForm=(props)=>{
           <option value="petrol">Petrol</option>
           <option value="Shopping">Shopping</option>
           </select>
-          <button type="submit" className="btn btn-primary mt-5" >Save</button>
-        </form>
+          <button type="submit" className="btn btn-primary mt-5" >{ctx.isEditing?'Update':'Save'}</button>
+        </form>}      
       </div>
   
     )
