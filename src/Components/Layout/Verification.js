@@ -1,8 +1,11 @@
 import React, { useContext } from 'react';
-import AuthContext from '../store/AuthContext';
+//import AuthContext from '../store/AuthContext';
+import { useDispatch } from 'react-redux';
+import { authAction } from '../ReduxStore/AuthReducer';
 
 const Verification = () => {
-    const ctx=useContext(AuthContext);
+    //const ctx=useContext(AuthContext);
+    const dispatch = useDispatch();
     const token=localStorage.getItem('token');
     let url='https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDh4Q71z_iYl7koXLXL8FAvALOnpFvgCxU';
     const verifyEmail=async()=>{
@@ -24,7 +27,8 @@ const Verification = () => {
     }
 
     const logoutHandler=()=>{
-        ctx.logout();
+        //ctx.logout();
+        dispatch(authAction.logout());
     }
   return (
     <div>

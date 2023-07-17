@@ -1,11 +1,23 @@
 import React, { useContext } from 'react';
-import ExpenseContext from '../store/ExpenseContext';
+//import ExpenseContext from '../store/ExpenseContext';
+import { useDispatch,useSelector } from 'react-redux';
+import { ExpenseAction } from '../ReduxStore/ExpenseReducer';
 const UserExpenseItem=(props)=>{
-    const ctx=useContext(ExpenseContext);
+    //const ctx=useContext(ExpenseContext);
 
+    const dispatch=useDispatch();
+    const arrayOfData=useSelector((state)=>state.expenseReducer.expenses)
 
     const editHandler=(id, amount, description, category)=>{
-      ctx.edit(id, amount, description, category);
+
+      const obj={
+        id:id,
+        amount:amount,
+        description:description,
+        category:category
+      }
+      dispatch(ExpenseAction.edit(obj)); // cann't take more than one argument, so I store in obj and pass
+     // ctx.edit(id, amount, description, category);
     }
 
     const email=localStorage.getItem('email').replace(/[@,.]/g,'')
@@ -16,6 +28,7 @@ const UserExpenseItem=(props)=>{
               method:'DELETE'
           });
           console.log(response);
+          dispatch(ExpenseAction.deleteData());
       }
       catch(err){
           console.log(err);
@@ -24,6 +37,12 @@ const UserExpenseItem=(props)=>{
     const deleteHandler=(id)=>{
       deleteExpense(id)
     }
+
+    let totalAmount=0;
+    arrayOfData.forEach((expense)=>{
+     totalAmount+=Number(expense.amount)
+    })
+ 
     return(
     <div>
       <table className='table'>
@@ -39,7 +58,7 @@ const UserExpenseItem=(props)=>{
         </tr>
       </thead>
       <tbody>
-        {ctx.expenses.map((expense,index)=>{
+        {arrayOfData.map((expense,index)=>{
             return(
             <tr key={expense.id}>
                 <th scope="row">{index+1}</th>
@@ -59,6 +78,11 @@ const UserExpenseItem=(props)=>{
       </tbody>
 
       </table>
+      <div style={{display:'flex',justifyContent:'space-between', marginRight:'200px',fontWeight:"bold",fontSize:"25px"}}>
+        <div style={{marginLeft:"1rem"}}>Total expenses</div>
+        <div style={{marginRight:"5rem"}}>${totalAmount}</div>
+      </div>
+
     </div>
     )
 }
