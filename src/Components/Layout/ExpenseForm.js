@@ -1,16 +1,28 @@
 import React,{useState,useContext,useEffect} from 'react';
 import classes from './ExpenseForm.module.css';
-import ExpenseContext from '../store/ExpenseContext';
+//import ExpenseContext from '../store/ExpenseContext';
+import { ExpenseAction } from '../ReduxStore/ExpenseReducer';
+import { useDispatch,useSelector } from 'react-redux';
 
 
 const ExpenseForm=()=>{
+
+  const dispatch=useDispatch();
+  const isEditing=useSelector((state)=>state.expenseReducer.isEditing)
+  const idForEditing=useSelector((state)=>state.expenseReducer.id)
+  const amountForEditing=useSelector((state)=>state.expenseReducer.amount)
+  const descriptionForEditing=useSelector((state)=>state.expenseReducer.description)
+  const categoryForEditing=useSelector((state)=>state.expenseReducer.category)
+  const deleted=useSelector((state)=>state.expenseReducer.deleted)
+  const arrayOfData=useSelector((state)=>state.expenseReducer.expenses)
+
     const [expense, setExpense]=useState([]);
     const [amount,setAmount]=useState('');
     const [description,setDescription]=useState('');
     const [category,setCategory]=useState('food');
     const [show,setShow]=useState(false);
 
-    const ctx=useContext(ExpenseContext);
+    //const ctx=useContext(ExpenseContext);
 
     const amountHandler=(e)=>{
         setAmount(e.target.value);
@@ -34,7 +46,8 @@ const ExpenseForm=()=>{
           for(let key in data){
               arrayOfData.push({id:key, ...data[key]})
           }
-          setExpense(arrayOfData);
+          //setExpense(arrayOfData);
+          dispatch(ExpenseAction.addExpense(arrayOfData));
           console.log(arrayOfData);
       }
       catch(err){
@@ -43,7 +56,7 @@ const ExpenseForm=()=>{
   }
   const putData=async(obj)=>{
     try {
-        const response=await fetch(`${url}/${email}/${ctx.id}.json`,{
+        const response=await fetch(`${url}/${email}/${idForEditing}.json`,{
             method:'PUT',
             body:JSON.stringify(obj),
             headers:{
@@ -86,8 +99,9 @@ const ExpenseForm=()=>{
           description:description,
           category:category
         }
-        if(ctx.isEditing){
-          ctx.update(ctx.id,obj)
+        if(isEditing){
+          //ctx.update(ctx.id,obj);
+          dispatch(ExpenseAction.update());
           putData(obj)
         }else{
           postData(obj)
@@ -97,25 +111,32 @@ const ExpenseForm=()=>{
         // setDescription('');
         // setCategory('');
     }
+
+  let total=0;
+  arrayOfData.forEach((exp)=>{
+    total+=Number(exp.amount)
+  })
+
     useEffect(()=>{
-      if(ctx.isEditing){
-        setAmount(ctx.amount);
-        setDescription(ctx.description);
-        setCategory(ctx.category);
+      if(isEditing){
+        setAmount(amountForEditing);
+        setDescription(descriptionForEditing);
+        setCategory(categoryForEditing);
       }else{
         setAmount("")
         setDescription("")
         setCategory("")
       }
-      },[ctx.isEditing])
+      },[isEditing])
       
     useEffect(()=>{
       getData()
-    },[]);
+    },[deleted]);
     
     return(
     <div className={classes.parent}>
         <div className={classes.add}>
+            {total>=10000 && <button type="button" className="btn btn-primary mt-5 mb-5 me-5">Premium</button>}
             <button type="button" className="btn btn-primary mt-5 mb-5" onClick={showHandler}>{show ? 'close' : '+Add Expense'}</button>
         </div>
        {show && <form className={classes.form} onSubmit={submitHandler}>
@@ -134,7 +155,7 @@ const ExpenseForm=()=>{
           <option value="petrol">Petrol</option>
           <option value="Shopping">Shopping</option>
           </select>
-          <button type="submit" className="btn btn-primary mt-5" >{ctx.isEditing?'Update':'Save'}</button>
+          <button type="submit" className="btn btn-primary mt-5" >{isEditing?'Update':'Save'}</button>
         </form>}      
       </div>
   

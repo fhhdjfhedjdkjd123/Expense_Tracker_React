@@ -2,7 +2,9 @@ import { useContext,useRef,useState} from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import classes from "./Auth.module.css"
-import AuthContext from "../Components/store/AuthContext";
+//import AuthContext from "../Components/store/AuthContext";
+import { useDispatch } from "react-redux";
+import { authAction } from "../Components/ReduxStore/AuthReducer";
 
 const Auth = (props) => {
   const emailRef = useRef();
@@ -11,16 +13,71 @@ const Auth = (props) => {
   const [login, setIsLogin] = useState(true);
   const [error,setError]=useState('');
 
-  const ctx=useContext(AuthContext);
-  const isLogin = ctx.isLogin;
-  const switchAuthHandler = ctx.switchAuth;
+  const dispatch = useDispatch();
+
+  //const ctx=useContext(AuthContext);
+  //const isLogin = ctx.isLogin;
+  //const switchAuthHandler = ctx.switchAuth;
 
 
   const switchHandler = () => {
-    switchAuthHandler();
+    //switchAuthHandler();
     setIsLogin(!login);
   };
+  let url;
+  const Authentication=async(email,password)=>{
+      if(login){
+          url='https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDh4Q71z_iYl7koXLXL8FAvALOnpFvgCxU'
+      }else{
+          url='https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDh4Q71z_iYl7koXLXL8FAvALOnpFvgCxU'
+      }
+     try
+     {
+      const response=await fetch(url,{
+          method:'POST',
+          body:JSON.stringify({
+              email:email,
+              password:password,
+              returnSecureToken:true
+          }),
+          headers:{
+              'Content-Type':'application/json'
+          }
+      })
+          const data=await response.json();
+          console.log(data);
+          // console.log(data.error)
+          // if(!data.error){
+          //   localStorage.setItem('token', data.idToken);
+          //   localStorage.setItem('email', email);
+          //   dispatch(authAction.login());
+          // }
 
+
+          console.log(response.ok);
+          if(!response.ok){
+              //localStorage.setItem('token', data.idToken);
+              //setIsAuthenticate(true);
+              //localStorage.setItem('email', userEmail);
+              throw new Error(data.error.message);
+          }else{
+              localStorage.setItem('token', data.idToken);
+              localStorage.setItem('email', email);
+              //setIsAuthenticate(true);
+              dispatch(authAction.login());
+              // if(login){
+              //     console.log("User has successfully login");
+              // }else{
+              //     console.log("User has successfully signup");
+              // }
+      
+          }
+      }
+      catch(err){
+          console.log(err);
+          alert(err);
+      }
+  }
 
   const loginFormSubmitHandler =  async (event) => {
     event.preventDefault();
@@ -33,12 +90,14 @@ const Auth = (props) => {
         setError("Password doen't match");
       }else{
         setError(" ");
-        ctx.authFunction(enteredEmail,enteredPassword);
+        Authentication(enteredEmail,enteredEmail);
+        //ctx.authFunction(enteredEmail,enteredPassword);
         console.log(enteredEmail,enteredPassword,enteredConfirmPass);
     
       }
     }else{
-      ctx.authFunction(enteredEmail,enteredPassword);
+      Authentication(enteredEmail,enteredPassword);
+      //ctx.authFunction(enteredEmail,enteredPassword);
       console.log(enteredEmail,enteredPassword);
 
     }
