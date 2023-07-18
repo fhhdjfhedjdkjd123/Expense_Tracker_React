@@ -3,6 +3,7 @@ import classes from './ExpenseForm.module.css';
 //import ExpenseContext from '../store/ExpenseContext';
 import { ExpenseAction } from '../ReduxStore/ExpenseReducer';
 import { useDispatch,useSelector } from 'react-redux';
+import { ThemeReducerAction } from '../ReduxStore/ThemeReducer';
 
 
 const ExpenseForm=()=>{
@@ -133,10 +134,30 @@ const ExpenseForm=()=>{
       getData()
     },[deleted]);
     
+    const themeChangeHandler=()=>{
+      dispatch(ThemeReducerAction.ModeChange());
+    }
+
+    const heading=['Expense', 'Category','Description'];
+    const ExpToDwnld=[heading]
+    arrayOfData.forEach((exp)=>{
+      ExpToDwnld.push([exp.amount, exp.category,exp.description])
+    });
+    const ExpToDwnld2=ExpToDwnld.map((expense)=>{
+      return expense.join(',')
+    }).join('\n');
+    const blob=new Blob([ExpToDwnld2]);
+    const urlToDwnld=URL.createObjectURL(blob);
+
+
     return(
     <div className={classes.parent}>
         <div className={classes.add}>
-            {total>=10000 && <button type="button" className="btn btn-primary mt-5 mb-5 me-5">Premium</button>}
+            {total>=10000 && <button type="button" className="btn btn-primary mt-5 mb-5 me-5">
+                <a href={urlToDwnld} download="expense.csv" style={{color:'white',textDecoration:'none'}}> Download Expenses</a>
+            </button>}
+            {total>=10000 && <button type="button" className="btn btn-primary mt-5 mb-5 me-5" onClick={themeChangeHandler}>Change Theme</button>}
+            {total>=10000 && <button type="button" className="btn btn-primary mt-5 mb-5 me-5">Activate Premium</button>}
             <button type="button" className="btn btn-primary mt-5 mb-5" onClick={showHandler}>{show ? 'close' : '+Add Expense'}</button>
         </div>
        {show && <form className={classes.form} onSubmit={submitHandler}>
