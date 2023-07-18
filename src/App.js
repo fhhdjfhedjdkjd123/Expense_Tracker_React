@@ -11,8 +11,9 @@ import { useSelector } from 'react-redux';
 const App=()=> {
   //const ctx=useContext(AuthContext);
   const isAuthenticate = useSelector((state)=>state.authReducer.isAuthenticate);
+  const isMode = useSelector((state)=>state.themeReducer.isMode);
   return (
-    <div>
+    <div className={isMode? "container" :''}>
       <Switch>
         <Route path="/" exact>
           {!isAuthenticate?<Auth/>:<ProfileForm/>}
